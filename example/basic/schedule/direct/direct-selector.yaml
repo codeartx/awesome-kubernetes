@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: direct-selector-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: direct-selector-pod
+  template:
+    metadata:
+      name: direct-selector
+      labels:
+        app: direct-selector-pod
+    spec:
+      # 直接指定 标签选择器，限制指定cpu架构的主机才能部署
+      nodeSelector:
+#        kubernetes.io/arch: x86 # ❌ mac amd64 上无法安装
+        kubernetes.io/arch: amd64 # ✅ mac amd64 上可以安装
+      containers:
+        - name: direct-selector
+          image: busybox
+          command: [ "sleep", "10000" ]

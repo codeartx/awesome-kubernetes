@@ -1,0 +1,8 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: externalname-svc
+spec:
+  type: ExternalName
+#  externalName: baidu.com # cname到百度地址
+  externalName: dashboard-metrics-scraper.kubernetes-dashboard.svc.cluster.local # cname到其他namespace下的服务

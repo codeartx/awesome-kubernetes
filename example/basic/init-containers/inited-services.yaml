@@ -1,0 +1,20 @@
+# 主容器依赖的服务环境，由init容器进行检测是否就绪
+apiVersion: v1
+kind: Service
+metadata:
+  name: init-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: init-db
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9377

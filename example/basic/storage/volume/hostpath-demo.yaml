@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpathpd
+spec:
+  volumes:
+    - name: hostpath-vol
+      hostPath: # 主机路径型
+        type: Directory
+#        path: ./data
+        path: /Users/kiky/kk/k-k8s/example/storage/data
+  containers:
+    - name: busybox
+      image: busybox
+      command:
+        - sleep
+        - "3600"
+      volumeMounts:
+        - mountPath: /usr/share/data
+          name: hostpath-vol
+

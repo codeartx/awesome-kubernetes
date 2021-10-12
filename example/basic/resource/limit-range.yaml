@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: limited-ns
+
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: limitrange-test
+  namespace: limited-ns
+spec:
+  limits:
+    - type: Pod # Pod级限制
+      max:
+        cpu: 1000m
+        memory: 1024Mi
+      min:
+        cpu: 100m
+        memory: 128Mi
+
+    - type: Container  # Container级限制
+      max:
+        cpu: 300m
+        memory: 1024Mi
+      min:
+        cpu: 10m
+        memory: 128Mi
+
+      default: # 即limit
+        cpu: 100m
+        memory: 512Mi
+      defaultRequest:
+        cpu: 50m
+        memory: 256Mi
+
+---
+# 测试 limitrange
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: limited-ns
+  labels:
+    app: busybox
+spec:
+  restartPolicy: Always
+  containers:
+    - name: busybox
+      image: busybox
+      command:
+        - sleep
+        - "3600"
+      # 如果不限制，则会报错 pods "busybox" is forbidden: minimum cpu usage per Pod is 100m, but request is 50m
+#      resources:
+#        requests:
+#          cpu: 100m

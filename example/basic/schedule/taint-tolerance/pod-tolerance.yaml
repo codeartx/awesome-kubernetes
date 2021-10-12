@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-tole
+  labels:
+    app: test
+spec:
+  containers:
+    - name: tole-ctn
+      image: busybox
+      command: [ "sleep", "10000" ]
+  # 容忍app=test污点
+  tolerations:
+    - key: "app"
+      operator: "Equal"
+      value: "test"

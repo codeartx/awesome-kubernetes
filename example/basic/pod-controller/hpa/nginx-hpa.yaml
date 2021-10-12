@@ -1,0 +1,42 @@
+# 无状态服务部署 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-hpa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-hpa
+  template:
+    metadata:
+      name: nginx-hpa
+      labels: # 必须指定标签
+        app: nginx-hpa
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          # hpa 生效必须的资源请求配置
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 10m # 设置小些，便于增加负载测试
+
+# 暴露 nginx ，便于测试
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-svc
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 30001 # 主机 Port
+  selector: # 必须指定目标标签的pod
+    app: nginx-hpa

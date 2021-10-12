@@ -1,0 +1,58 @@
+# 静态（手动）pv/pvc使用方式
+# 创建PV
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-static
+  labels:
+    pv: pv-static
+spec:
+  storageClassName: hostpath # 默认
+  hostPath:
+    path: /Users/kiky/kk/k-k8s/example/basic/storage/pv/data
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Mi
+
+# 创建PVC
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-static
+spec:
+  resources:
+    requests:
+      storage: 10Mi # 匹配成功
+  accessModes:
+    - ReadWriteOnce
+  selector:
+    matchLabels: # 匹配标签为 pv: pv-static 的 PV
+      pv: pv-static # 成功
+
+# 使用静态的PVC
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  labels:
+    app: busybox
+spec:
+  volumes: # PVC 关联到 Pod
+    - name: pv-static-vol
+      persistentVolumeClaim:
+        claimName: pvc-static
+  containers:
+    - name: busybox
+      image: busybox
+      command:
+        - sleep
+        - "3600"
+      volumeMounts: # 关联到容器
+        - mountPath: /usr/share
+          subPath: busybox
+          name: pv-static-vol
+

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-affinity-pod
+spec:
+  containers:
+    - name: node-affinity-ctn
+      image: busybox
+      command: [ "sleep", "10000" ]
+  affinity:
+    nodeAffinity: # 节点亲和性
+      preferredDuringSchedulingIgnoredDuringExecution: # 软策略
+        - weight: 1
+          preference:
+            matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - docker-desktop # ✅本地可部署
+#                  - docker-desktop2 # ⚠️匹配失败，但仍可以部署

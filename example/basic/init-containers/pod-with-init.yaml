@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+  labels:
+    app: app
+spec:
+  # init 初始化准备容器，用于检测主容器是否具备启动的依赖条件
+  initContainers:
+    - name: init-service # 检查 init-service 服务是否就绪
+      image: busybox:1.28
+      command:
+        - "sh"
+        - "-c"
+        - "until nslookup init-service.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for init-service; sleep 2; done"
+    - name: init-db
+      image: busybox:1.28
+      command: # 检查 init-db 服务是否就绪
+        - "sh"
+        - "-c"
+        - "until nslookup init-db.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for init-db; sleep 2; done"
+  # 主容器，待上述所有init初始化检查重启检测成功后，才会启动主容器
+  containers:
+    - name: app-container
+      image: busybox:1.28
+      command: [ 'sh', '-c', 'echo The app is running! && sleep 3600' ]

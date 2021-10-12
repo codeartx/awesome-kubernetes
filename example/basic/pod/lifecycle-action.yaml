@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lifecycle-demo
+spec:
+  containers:
+    - name: lifecycle-demo-container
+      image: nginx
+      # 生命周期回调，可在启动后初始化配置，也可以在停止前释放资源
+      lifecycle:
+        postStart:
+          exec:
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "echo Hello from the postStart handler > /usr/share/start.log"
+        preStop:
+          exec:
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "echo Hello from the poststop handler > /usr/share/stop.log && sleep 20"

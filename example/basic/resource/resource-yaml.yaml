@@ -1,0 +1,25 @@
+# 以Yaml方式配置对象的规约（Spec），描述该对象的基本信息以及期望状态，供命令行客户端 kubectl 使用
+apiVersion: apps/v1 # api版本，不同资源可能属于不同的CRD API，因此需要根据资源类型，选择兼容的版本
+kind: Deployment # 资源种类，可以是k8s内置的资源，也可以通过CRD扩展自己的资源种类
+
+metadata: # 元数据，该资源的元数据，用于标记资源，以便k8s进行更高维度的管理
+  name: nginx-deployment # 资源名，建议在同一namespace下是唯一的
+  namespace: app-test # 命名空间，非集群级资源，需要绑定命名空间，进行隔离
+  labels: # 标签（特征点）
+    apps: nginx
+
+spec: # 规约，核心，定义资源本身的属性和期望状态，以便k8s创建和部署该资源，以达到期望的状态
+  selector: # 标签选择器，表示当前资源（如Deployment）仅对指定标签的受控资源（如Pod）生效、管理
+    matchLabels:
+      app: nginx
+  replicas: 2 # （Pod）副本数
+  template: # （Pod）模板（核心），用于创建、部署Pod（最小部署单元）的模板
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80

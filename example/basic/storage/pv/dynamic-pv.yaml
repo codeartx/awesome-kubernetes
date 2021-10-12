@@ -1,0 +1,58 @@
+# 根据 PVC 动态创建合适的 PV 并绑定
+# 创建PV
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-static
+  labels:
+    pv: pv-static
+spec:
+  storageClassName: hostpath # 默认
+  hostPath:
+    path: /Users/kiky/kk/k-k8s/example/basic/storage/pv/data
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 100Mi
+
+# 创建PVC
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-static
+spec:
+  storageClassName: hostpath
+  resources:
+    requests:
+      storage: 110Mi # PVC > PV ，也会自动创建
+  accessModes:
+    - ReadWriteOnce
+  selector:
+    matchLabels: # 匹配标签为 pv: pv-static 的 PV
+      pv: pv-static1 # 标签失败，则自动新建
+
+# 使用静态的PVC
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  labels:
+    app: busybox
+spec:
+  volumes: # PVC 关联到 Pod
+    - name: pv-static-vol
+      persistentVolumeClaim:
+        claimName: pvc-static
+  containers:
+    - name: busybox
+      image: busybox
+      command:
+        - sleep
+        - "3600"
+      volumeMounts: # 关联到容器
+        - mountPath: /usr/share
+          name: pv-static-vol
+

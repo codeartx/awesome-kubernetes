@@ -1,0 +1,15 @@
+# 最基本的Pod方式部署
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  labels:
+    app: busybox
+spec:
+  restartPolicy: Always
+  containers:
+    - name: busybox
+      image: busybox
+      command:
+        - sleep
+        - "3600"

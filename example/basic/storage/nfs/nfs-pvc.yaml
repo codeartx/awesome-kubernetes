@@ -1,0 +1,27 @@
+# 声明nfs存储空间
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-storage # 需与 PVC 的 storageClassName 保持一致
+provisioner: nfs-client                                 # 动态卷分配者名称，需与 Deployment 的 spec.template.spec.containers.env.PROVISIONER_NAME 一致
+parameters:
+  archiveOnDelete: "true"                               # 设置为"false"时删除PVC不会保留数据,"true"则保留数据
+mountOptions:
+  - hard                                                # 指定为硬挂载方式
+  - nfsvers=4                                           # 指定NFS版本，这个需要根据 NFS Server 版本号设置
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: test-pvc
+spec:
+  storageClassName: nfs-storage #---需要与上面创建的storageclass的名称一致
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Mi
+
+

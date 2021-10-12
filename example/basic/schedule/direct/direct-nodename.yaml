@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox
+  template:
+    metadata:
+      labels:
+        app: busybox
+    spec:
+      # 直接指定 节点名
+      #      nodeName: docker-desktop # ✅
+      nodeName: k8s-node1 # ❌
+      containers:
+        - name: busybox
+          image: busybox
+          command: [ "sleep", "10000" ]

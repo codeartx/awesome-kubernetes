@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod # 资源类型
+metadata: # 资源元数据
+  name: tomcat9 # 必填
+  labels:
+    app: tomcat9
+spec:
+  containers:
+    - name: tomcat9
+      image: tomcat:9.0.20-jre8-alpine
+      imagePullPolicy: IfNotPresent # 镜像拉取策略
+      # ----- 启动检测
+      startupProbe:
+        # http方式
+        httpGet:
+          port: 8080
+          path: /index.html
+        periodSeconds: 10
+        failureThreshold: 30
+      # ----- 活性检测
+      livenessProbe:
+        exec:
+          command: [ "test","-e","/tmp/livenesspod" ] # 0 - 成功，1 -失败
+        initialDelaySeconds: 1
+        periodSeconds: 3
+      # ----- 就绪检测
+      readinessProbe: # 就绪检测
+        tcpSocket: # 端口检测
+          port: 8080
+        initialDelaySeconds: 10
+        periodSeconds: 3
+        timeoutSeconds: 5
+      # ----- 生命周期
+      lifecycle:
+        postStart: # 在容器启动后执行该指令
+          exec:
+            command: [ 'mkdir','-p','/lagou/k8s/index.html' ]

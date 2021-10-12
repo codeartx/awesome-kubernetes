@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir-demo
+spec:
+  volumes:
+    - name: emptydir-html
+      emptyDir: { } # Pod 内部多容器间共享
+  containers:
+    - name: myapp
+      image: nginx
+      ports:
+        - name: http
+          containerPort: 80
+      volumeMounts:
+        - name: emptydir-html # 使用空目录 和spec.volumes[0].name 一致
+          mountPath: /usr/share/nginx/html/
+
+    - name: busybox # 包含ping工具
+      image: busybox
+      volumeMounts:
+        - name: emptydir-html # 使用空目录 和spec.volumes[0].name 一致
+          mountPath: /data/
+      command: [ "/bin/sh", "-c" ]
+      args:
+        - "while true; do echo $(date) >> /data/index.html; sleep 3; done"
+

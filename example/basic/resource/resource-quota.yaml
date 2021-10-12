@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: limited-ns
+
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+  namespace: limited-ns
+spec:
+  hard:
+    requests.cpu: 100m
+    requests.memory: 100Mi
+    limits.cpu: 200m
+    limits.memory: 200Mi
+
+---
+# 测试
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: limited-ns
+  labels:
+    app: busybox
+spec:
+  restartPolicy: Always
+  containers:
+    - name: busybox
+      image: busybox
+      command:
+        - sleep
+        - "3600"
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 200m
+          memory: 200Mi
+
+

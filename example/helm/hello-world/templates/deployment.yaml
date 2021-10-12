@@ -1,0 +1,21 @@
+# 无状态服务部署 Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-deploy
+spec:
+  replicas: 5
+  selector: # 基于 RS，必须配置标签选择器
+    matchLabels: # 比RC新增的标签选择器
+      app: hello-world # 和 spec.template.metadata.labels.app 一致
+  template:
+    metadata:
+      name: hello-world
+      labels: # 必须指定标签
+        app: hello-world
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 90

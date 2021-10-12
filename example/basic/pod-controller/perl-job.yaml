@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  completions: 6 # 至少完成10次
+  parallelism: 2 # 每次最多2个并行
+  backoffLimit: 4 # 容错次数
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: pi
+          image: perl:slim
+          command: [ "perl", "-Mbignum=bpi", "-wle", "print bpi(100)" ]
+

@@ -1,0 +1,5 @@
+###### 覆盖默认值
+
+# 解决 node-exploter 挂载问题 https://github.com/prometheus-community/helm-charts/issues/467
+prometheus-node-exporter:
+  hostRootFsMount: false

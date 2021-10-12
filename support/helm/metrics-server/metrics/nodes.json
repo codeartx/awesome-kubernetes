@@ -1,0 +1,29 @@
+{
+  "kind": "NodeMetricsList",
+  "apiVersion": "metrics.k8s.io/v1beta1",
+  "metadata": {},
+  "items": [
+    {
+      "metadata": {
+        "name": "docker-desktop",
+        "creationTimestamp": "2021-10-06T07:29:15Z",
+        "labels": {
+          "beta.kubernetes.io/arch": "amd64",
+          "beta.kubernetes.io/os": "linux",
+          "kubernetes.io/arch": "amd64",
+          "kubernetes.io/hostname": "docker-desktop",
+          "kubernetes.io/os": "linux",
+          "node-role.kubernetes.io/control-plane": "",
+          "node-role.kubernetes.io/master": "",
+          "node.kubernetes.io/exclude-from-external-load-balancers": ""
+        }
+      },
+      "timestamp": "2021-10-06T07:29:14Z",
+      "window": "21s",
+      "usage": {
+        "cpu": "578340470n",
+        "memory": "1895088Ki"
+      }
+    }
+  ]
+}
