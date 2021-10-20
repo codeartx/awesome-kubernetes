@@ -1,6 +1,6 @@
 # k-kubernetes-public
 
-面向 docker/kubernates 初学者的快速本地部署和测试 docker/k8s 各种功能特性。
+面向 docker/kubernates 初学者的快速本地部署和测试 docker/k8s 各种功能特性。 [Kubernates 实战专栏](https://juejin.cn/column/7021047815069499423)
 
 ### 运行环境
 
@@ -39,11 +39,13 @@
 
 - 解构图
 
-![](./imgs/abstract-ops-model.png)
+![](./imgs/k8s-DCOM.png)
 
-- [脑图](https://mm.edrawsoft.cn/map.html?sharecode=61677c6c9743d3a13988942)
+- 脑图
 
-![](./imgs/k8s-mind-full.png)
+[脑图完整版链接](https://mm.edrawsoft.cn/store?workId=172030)
+
+![](./imgs/k8s-service.png)
 
 ### 使用方法
 
