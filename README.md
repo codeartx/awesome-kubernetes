@@ -33,7 +33,7 @@
 
 ![](./imgs/hpa-yaml.png)
 
-### 完整脑图
+### 脑图
 
 从入门到进阶的脑图+实践，建立 k8s 基础知识网络。
 
@@ -41,9 +41,9 @@
 
 ![](./imgs/k8s-DCOM.png)
 
-- 脑图
+- 脑图[(完整版)](http://kjeek.com/k8s/awesome-kubernates/)
 
-[脑图完整版链接](https://mm.edrawsoft.cn/store?workId=172030)
+![](./imgs/k8s-outline.png)
 
 ![](./imgs/k8s-service.png)
 
